@@ -1,0 +1,20 @@
+{
+  "name": "Browser Sidecar",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Browser Sidecar extension examines browser state in other apps.",
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "icons": {
+    "128": "icon.svg"
+  },
+  "permissions": [
+    "history",
+    "nativeMessaging",
+    "tabs"
+  ]
+}

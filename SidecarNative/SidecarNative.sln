@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SidecarNativeApp", "SidecarNativeApp\SidecarNativeApp.csproj", "{1230BE27-1C40-4AF7-A1B1-743ED5212348}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SidecarNativeCLI", "SidecarNativeCLI\SidecarNativeCLI.csproj", "{4350D78D-C51D-440C-A860-6F34854527F9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SidecarNativeComm", "SidecarNativeComm\SidecarNativeComm.csproj", "{14C38878-F5CC-479F-A4D1-623334621029}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMessaging", "NativeMessaging\NativeMessaging\NativeMessaging.csproj", "{DD626178-3152-4F80-8719-15616F4C7726}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1230BE27-1C40-4AF7-A1B1-743ED5212348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1230BE27-1C40-4AF7-A1B1-743ED5212348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1230BE27-1C40-4AF7-A1B1-743ED5212348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1230BE27-1C40-4AF7-A1B1-743ED5212348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4350D78D-C51D-440C-A860-6F34854527F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4350D78D-C51D-440C-A860-6F34854527F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4350D78D-C51D-440C-A860-6F34854527F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4350D78D-C51D-440C-A860-6F34854527F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14C38878-F5CC-479F-A4D1-623334621029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C38878-F5CC-479F-A4D1-623334621029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C38878-F5CC-479F-A4D1-623334621029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C38878-F5CC-479F-A4D1-623334621029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD626178-3152-4F80-8719-15616F4C7726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD626178-3152-4F80-8719-15616F4C7726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD626178-3152-4F80-8719-15616F4C7726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD626178-3152-4F80-8719-15616F4C7726}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {304C53BD-1BA7-4C1A-BF38-8E7A0E59E30E}
+	EndGlobalSection
+EndGlobal
