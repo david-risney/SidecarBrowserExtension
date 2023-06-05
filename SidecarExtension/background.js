@@ -15,14 +15,29 @@ msg out
 
 */
 
-const port = chrome.runtime.connectNative('net.deletethis.myhost');
-port.onMessage.addListener(function (msg) {
-    console.log('Received', msg);
-    handleMessage(msg);
-});
-port.onDisconnect.addListener(function () {
-    console.log('Disconnected');
-});
+// Manages the connection with native app
+class Connection {
+    #port = null;
+
+    connect() {
+        console.log("Connecting...");
+        this.#port = chrome.runtime.connectNative('net.deletethis.myhost');
+        this.#port.onMessage.addListener(function (msg) {
+            console.log('Received', msg);
+            handleMessage(msg);
+        });
+        this.#port.onDisconnect.addListener(function () {
+            console.log('Disconnected');
+            this.connect();
+        });
+        console.log("Listening.");
+    }
+
+    get port() { return this.#port; }
+}
+
+const connection = new Connection();
+connection.connect();
 
 const nameToHandlerMap = {};
 
@@ -84,6 +99,15 @@ nameToHandlerMap.getFavicon = function (args, resolve, reject) {
         });
 }
 
+nameToHandlerMap.getBrowserInfo = function (args, resolve) {
+    resolve(JSON.stringify({
+        pid: "{SIDECAR:BrowserPid}",
+        exe: "{SIDECAR:BrowserExe}",
+        name: "{SIDECAR:BrowserName}",
+        version: "{SIDECAR:BrowserVersion}",
+    }));
+}
+
 function handleMessage(msg) {
     let resolve, reject;
     const promise = new Promise((resolveIn, rejectIn) => {
@@ -96,7 +120,9 @@ function handleMessage(msg) {
         if (handler) {
             handler(msg.args, resolve, reject);
         } else {
-            throw new Error("Unknown message action '" + msg.action + "'' from message " + JSON.stringify(msg));
+            throw new Error("Unknown message action '" + msg.action + "'" +
+                "\n\tfrom message '" + JSON.stringify(msg) + "'." +
+                "\n\tValid actions: " + Object.keys(nameToHandlerMap).join(", "));
         }
     }
     catch (err) {
@@ -112,7 +138,7 @@ function handleMessage(msg) {
             result
         };
         console.log("Success", reply);
-        port.postMessage(reply);
+        connection.port.postMessage(reply);
     }, result => {
         const reply = {
             targetId: msg.sourceId,
@@ -121,19 +147,6 @@ function handleMessage(msg) {
             result
         };
         console.log("Error", reply);
-        port.postMessage(reply);
+        connection.port.postMessage(reply);
     });
 }
-
-/*
-let port = browser.runtime.connectNative("SidecarNativeApp");
-
-port.onMessage.addListener((response) => {
-  console.log("Received: " + response);
-});
-
-browser.browserAction.onClicked.addListener(() => {
-  console.log("Sending:  ping");
-  port.postMessage("ping");
-});
-*/

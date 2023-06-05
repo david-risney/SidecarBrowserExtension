@@ -7,6 +7,6 @@ crossProcCommInClient.Connect();
 
 string message = String.Join(" ", args);
 Console.WriteLine("Sending: " + message);
-string result = await crossProcCommInClient.PostMessageWithResult(message);
+string result = crossProcCommInClient.PostMessageWithResult(message);
 
 Console.WriteLine("Received: " + result);

@@ -1,7 +1,6 @@
 ﻿using NativeMessaging;
 using SidecarNativeApp;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 class Program
 {
@@ -9,10 +8,10 @@ class Program
     {
         get
         {
-            string codeBase = Assembly.GetEntryAssembly().Location;
+            string codeBase = Assembly.GetEntryAssembly()?.Location ?? throw new Exception("No assembly.");
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
+            return Path.GetDirectoryName(path) ?? throw new Exception("No assembly.");
         }
     }
 
@@ -20,7 +19,7 @@ class Program
     {
         get
         {
-            string codeBase = Assembly.GetEntryAssembly().Location;
+            string codeBase = Assembly.GetEntryAssembly()?.Location ?? throw new Exception("No assembly.");
             UriBuilder uri = new UriBuilder(codeBase);
             return Uri.UnescapeDataString(uri.Path);
         }

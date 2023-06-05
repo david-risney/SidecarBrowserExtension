@@ -9,29 +9,20 @@ using ServiceWire.NamedPipes;
 
 namespace SidecarNativeComm
 {
-    public class CrossProcCommInClient : ICrossProcCommClient
+    public class CrossProcCommInClient 
     {
-        private NpClient<ICrossProcCommServer> _server;
+        private NpClient<ICrossProcCommServer>? _server;
 
         public CrossProcCommInClient() { }
 
         public void Connect()
         {
-            _server = new NpClient<ICrossProcCommServer>(new NpEndPoint(ICrossProcComm.PipeName));
-            //_server.Proxy.Client = this;
-            //_server.Proxy.MessageReceived += Proxy_MessageReceived;
+            _server = new NpClient<ICrossProcCommServer>(new NpEndPoint(Constants.PipeName));
         }
 
-        //private void Proxy_MessageReceived(object sender, string message) { this.MessageReceived?.Invoke(sender, message); }
-
-        //public event ICrossProcComm.MessageReceivedDelegate MessageReceived;
-
-        public void PostMessage(string messageAsString) { _server.Proxy.PostMessage(messageAsString); }
-        public void PostMessage(JObject messageAsJObject) { PostMessage(messageAsJObject.ToString()); }
-
-        public Task<string> PostMessageWithResult(string messageAsString)
+        public string PostMessageWithResult(string messageAsString)
         {
-            return _server.Proxy.PostMessageWithResult(messageAsString);
+            return _server?.Proxy.PostMessageWithResult(messageAsString);
         }
     }
 }
