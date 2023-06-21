@@ -22,11 +22,11 @@ class Connection {
     connect() {
         console.log("Connecting...");
         this.#port = chrome.runtime.connectNative('net.deletethis.myhost');
-        this.#port.onMessage.addListener(function (msg) {
+        this.#port.onMessage.addListener(msg => {
             console.log('Received', msg);
             handleMessage(msg);
         });
-        this.#port.onDisconnect.addListener(function () {
+        this.#port.onDisconnect.addListener(() => {
             console.log('Disconnected');
             this.connect();
         });

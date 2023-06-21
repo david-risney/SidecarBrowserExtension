@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ServiceWire" Version="5.5.4" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SidecarNativeCLI": {
+      "commandName": "Project",
+      "commandLineArgs": "\"{ 'action': 'queryTabs', 'args': {  } }\""
+    }
+  }
+}

@@ -1,19 +1,14 @@
-﻿using ServiceWire.NamedPipes;
-using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using System.IO.Pipes;
 using System.Diagnostics;
 
 namespace SidecarNativeComm
 {
     public class NamedPipeServer
     {
-        private string _name = "net.deletethis.myhost.servername";
-        private int _numThreads = 4;
+        public static string DefaultPipeName = "net.deletethis.myhost.servername";
+
+        private string _name = DefaultPipeName;
+        private int _numThreads = 1;
         Thread?[]? _servers;
 
         public delegate string ProcessMessage(string message);
@@ -48,18 +43,20 @@ namespace SidecarNativeComm
                     {
                         if (_servers[j]!.Join(250))
                         {
-                            Console.WriteLine("Server thread[{0}] finished.", _servers[j]!.ManagedThreadId);
+                            //Console.WriteLine("Server thread[{0}] finished.", _servers[j]!.ManagedThreadId);
                             _servers[j] = null;
                             i--;    // decrement the thread watch count
                         }
                     }
                 }
             }
-            Console.WriteLine("\nServer threads exhausted, exiting.");
+            //Console.WriteLine("\nServer threads exhausted, exiting.");
         }
 
         private void ServerThread()
         {
+            Thread.CurrentThread.Name = "NamedPipeServer";
+
             int threadId = Thread.CurrentThread.ManagedThreadId;
 
             while (true)
@@ -70,7 +67,7 @@ namespace SidecarNativeComm
                 // Wait for a client to connect
                 pipeServer.WaitForConnection();
 
-                Console.WriteLine("Client connected on thread[{0}].", threadId);
+                //Console.WriteLine("Client connected on thread[{0}].", threadId);
                 try
                 {
                     // Read the request from the client. Once the client has
@@ -90,9 +87,9 @@ namespace SidecarNativeComm
                 }
                 // Catch the IOException that is raised if the pipe is broken
                 // or disconnected.
-                catch (IOException e)
+                catch (IOException)
                 {
-                    Console.WriteLine("ERROR: {0}", e.Message);
+                    //Console.WriteLine("ERROR: {0}", e.Message);
                 }
                 pipeServer.Close();
             }

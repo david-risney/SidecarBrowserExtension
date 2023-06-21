@@ -3,63 +3,41 @@ using System.Runtime.InteropServices.JavaScript;
 using NativeMessaging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ServiceWire.NamedPipes;
-using ServiceWire;
 using System.Diagnostics;
 using SidecarNativeApp;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SidecarNativeComm
 {
-    public class CrossProcCommInNativeApp : ICrossProcCommServer
+    public class CrossProcCommInNativeApp
     {
-        private NpHost? _npHost;
+        private NamedPipeServer _server;
         private NativeMessaging.Host _host;
 
         public CrossProcCommInNativeApp(NativeMessaging.Host host)
         {
             _host = host;
+            _server = new NamedPipeServer(NamedPipeServer.DefaultPipeName, 10);
+            _server.OnProcessMessage = PostMessageWithResult;
         }
 
         public void Connect()
         {
-            Close();
-
-            var logger = new Logger(logLevel: LogLevel.Debug);
-            var stats = new Stats();
-
-            _npHost = new NpHost(Constants.PipeName, logger, stats);
-            _npHost.AddService<ICrossProcCommServer>(this);
-
-            _npHost.Open();
+            _server.Listen();
         }
 
         public void Close()
         {
-            if (_npHost != null)
-            {
-                _npHost.Close();
-                _npHost = null;
-            }
-        }
-
-        public void PostMessage(string messageAsString)
-        {
-            PostMessage(JObject.Parse(messageAsString));
-        }
-
-        public void PostMessage(JObject messageAsJObject)
-        {
-            _host.SendMessage(messageAsJObject);
+            _server.Join();
         }
 
         private TaskCompletionSource<string>? _tcsWaitingForResponse = null;
 
-        public string PostMessageWithResult(string messageAsString)
+        private string PostMessageWithResult(string messageAsString)
         {
             _tcsWaitingForResponse = new TaskCompletionSource<string>();
             _host.MessageReceived += Host_MessageReceivedForResponse;
-            PostMessage(messageAsString);
+            _host.SendMessage(JObject.Parse(messageAsString));
 
             string result = _tcsWaitingForResponse.Task.Result;
             result = ReplaceValuesInMessage(result);
@@ -77,13 +55,12 @@ namespace SidecarNativeComm
         public string ReplaceValuesInMessage(string message)
         {
             message = message.Replace("{SIDECAR:BrowserPid}", BrowserPid.ToString());
-            message = message.Replace("{SIDECAR:BrowserExe}", BrowserExe);
-            message = message.Replace("{SIDECAR:BrowserName}", BrowserName);
-            message = message.Replace("{SIDECAR:BrowserVersion}", BrowserVersion);
+            //message = message.Replace("{SIDECAR:BrowserExe}", BrowserExe);
+            //message = message.Replace("{SIDECAR:BrowserName}", BrowserName);
+            //message = message.Replace("{SIDECAR:BrowserVersion}", BrowserVersion);
 
             return message;
-        }
-        
+        }        
 
         private void Host_MessageReceivedForResponse(object sender, NativeMessaging.Host.MessageReceivedEventArgs e)
         {

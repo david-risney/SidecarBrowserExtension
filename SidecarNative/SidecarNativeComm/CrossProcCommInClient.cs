@@ -5,24 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ServiceWire.NamedPipes;
 
 namespace SidecarNativeComm
 {
     public class CrossProcCommInClient 
     {
-        private NpClient<ICrossProcCommServer>? _server;
+        NamedPipeClient _client;
 
-        public CrossProcCommInClient() { }
+        public CrossProcCommInClient()
+        {
+            _client = new NamedPipeClient(NamedPipeServer.DefaultPipeName);
+        }
 
         public void Connect()
         {
-            _server = new NpClient<ICrossProcCommServer>(new NpEndPoint(Constants.PipeName));
+            _client.Connect();
         }
 
         public string PostMessageWithResult(string messageAsString)
         {
-            return _server?.Proxy.PostMessageWithResult(messageAsString);
+            return _client.SendMessageWithReply(messageAsString);
         }
     }
 }
